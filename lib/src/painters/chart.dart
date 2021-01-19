@@ -7,14 +7,14 @@ import 'package:flutter/material.dart';
 
 import '../styles/chartStyle.dart';
 
-//TODO _getChartRect save state as it's immutable after setting usableSpacePadding
 abstract class ChartPainter extends CustomPainter {
   final ChartStyle style;
   final Function(double) getVerticalAxis, getHorizontalAxis;
   final Offset tap;
   final bool allowPopupOverflow;
 
-  EdgeInsets usableSpacePadding = const EdgeInsets.all(0);
+  EdgeInsets chartSpaceMargin = const EdgeInsets.all(0);
+  Rect chartRect = Rect.zero;
 
   ChartPainter({
     @required this.style,
@@ -88,8 +88,8 @@ abstract class ChartPainter extends CustomPainter {
         )
         .toList();
 
-    // Calculate usable space padding by finding largest text
-    usableSpacePadding = EdgeInsets.only(
+    // Calculate chart margin by finding largest text
+    chartSpaceMargin = EdgeInsets.only(
       top: verticalPainters.first.height / 2,
       right: verticalPainters.last.width / 2,
       bottom: horizontalPainters.fold(
@@ -104,14 +104,19 @@ abstract class ChartPainter extends CustomPainter {
           style.plotPadding.left,
     );
 
-    // Get usable space rect
-    final Rect rect = getChartRect(size);
+    // Calculate chart rect
+    chartRect = Rect.fromLTRB(
+      chartSpaceMargin.left,
+      chartSpaceMargin.top,
+      size.width - chartSpaceMargin.right,
+      size.height - chartSpaceMargin.bottom,
+    );
 
     // Draw horizontal and vertical lines if needed
     if (style.verticalLinesStyle.draw)
-      _drawVerticalLines(canvas, rect, horizontalPositions);
+      _drawVerticalLines(canvas, chartRect, horizontalPositions);
     if (style.horizontalLinesStyle.draw)
-      _drawHorizontalLines(canvas, rect, verticalPositions);
+      _drawHorizontalLines(canvas, chartRect, verticalPositions);
 
     for (final TextPainter painter in verticalPainters) {
       final i = verticalPainters.indexOf(painter);
@@ -119,8 +124,10 @@ abstract class ChartPainter extends CustomPainter {
       painter.paint(
         canvas,
         Offset(
-          rect.left - style.plotPadding.left,
-          rect.top + rect.height - (rect.height * verticalPositions[i]),
+          chartRect.left - style.plotPadding.left,
+          chartRect.top +
+              chartRect.height -
+              (chartRect.height * verticalPositions[i]),
         ).translate(-painter.width, painter.height / -2),
       );
     }
@@ -131,8 +138,8 @@ abstract class ChartPainter extends CustomPainter {
       painter.paint(
         canvas,
         Offset(
-          rect.left + rect.width * horizontalPositions[i],
-          rect.height + style.plotPadding.bottom,
+          chartRect.left + chartRect.width * horizontalPositions[i],
+          chartRect.height + style.plotPadding.bottom,
         ).translate(-painter.width / 2, painter.height / 2),
       );
     }
@@ -142,13 +149,6 @@ abstract class ChartPainter extends CustomPainter {
         text: TextSpan(text: text, style: style),
         textDirection: ui.TextDirection.rtl,
       )..layout();
-
-  Rect getChartRect(Size size) => Rect.fromLTRB(
-        usableSpacePadding.left,
-        usableSpacePadding.top,
-        size.width - usableSpacePadding.right,
-        size.height - usableSpacePadding.bottom,
-      );
 
   // Draws data line
   void drawChart(Canvas canvas, Size size);

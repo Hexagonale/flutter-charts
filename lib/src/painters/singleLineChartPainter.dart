@@ -139,7 +139,7 @@ class SingleLineChartPainter extends ChartPainter {
   }
 
   Offset _getTapPercentage(Size size) {
-    // Get percentage of touch in relation to usabe space
+    // Get percentage of touch in relation to chart
     // And limit iit within space
     final double tap = min(max(_getPercent(this.tap, size).dx, 0), 1);
 
@@ -181,32 +181,20 @@ class SingleLineChartPainter extends ChartPainter {
         center.dy + (size.height / 2),
       );
 
-  Offset _getPointFromKey(double key, Size size) {
-    final chartRect = getChartRect(size);
+  Offset _getPointFromKey(double key, Size size) => Offset(
+        (key * chartRect.width) + chartRect.left,
+        chartRect.height - (rawData[key] * chartRect.height) + chartRect.top,
+      );
 
-    return Offset(
-      (key * chartRect.width) + chartRect.left,
-      chartRect.height - (rawData[key] * chartRect.height) + chartRect.top,
-    );
-  }
+  Offset _getPointFromOffset(Offset offset, Size size) => Offset(
+        (offset.dx * chartRect.width) + chartRect.left,
+        chartRect.height - (offset.dy * chartRect.height) + chartRect.top,
+      );
 
-  Offset _getPointFromOffset(Offset offset, Size size) {
-    final chartRect = getChartRect(size);
-
-    return Offset(
-      (offset.dx * chartRect.width) + chartRect.left,
-      chartRect.height - (offset.dy * chartRect.height) + chartRect.top,
-    );
-  }
-
-  Offset _getPercent(Offset point, Size size) {
-    final chartRect = getChartRect(size);
-
-    return Offset(
-      (point.dx - chartRect.left) / chartRect.width,
-      (point.dy - chartRect.top) / chartRect.height,
-    );
-  }
+  Offset _getPercent(Offset point, Size size) => Offset(
+        (point.dx - chartRect.left) / chartRect.width,
+        (point.dy - chartRect.top) / chartRect.height,
+      );
 
   // Draws data line
   @override
@@ -236,7 +224,7 @@ class SingleLineChartPainter extends ChartPainter {
   // Draws onTap popup and point
   @override
   void drawTap(Canvas canvas, Size size) {
-    // Get touch offset in percents of usable space
+    // Get touch offset in percents of chart
     final Offset point = _getTapPercentage(size);
 
     // Draw point and rectangle
