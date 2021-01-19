@@ -10,10 +10,18 @@ class SingleLineChartPainter extends ChartPainter {
   final SingleLineChartStyle style;
   final Map<double, double> rawData;
   final List<double> keys;
-  final Function(Canvas canvas, Size size, Offset point, Offset drawablePoint)
-      drawPoint;
-  final Function(Canvas canvas, Size size, Offset point, Offset drawablePoint)
-      drawPopup;
+  final Function(
+    Canvas canvas,
+    Size size,
+    Offset point,
+    Offset drawablePoint,
+  ) drawPoint;
+  final Function(
+    Canvas canvas,
+    Size size,
+    Offset point,
+    Offset drawablePoint,
+  ) drawPopup;
 
   SingleLineChartPainter({
     @required Function(double) getVerticalAxis,
