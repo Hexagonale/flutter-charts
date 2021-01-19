@@ -118,6 +118,7 @@ abstract class ChartPainter extends CustomPainter {
     if (style.horizontalLinesStyle.draw)
       _drawHorizontalLines(canvas, chartRect, verticalPositions);
 
+    // Draw vertical axis text
     for (final TextPainter painter in verticalPainters) {
       final i = verticalPainters.indexOf(painter);
 
@@ -125,13 +126,12 @@ abstract class ChartPainter extends CustomPainter {
         canvas,
         Offset(
           chartRect.left - style.plotPadding.left,
-          chartRect.top +
-              chartRect.height -
-              (chartRect.height * verticalPositions[i]),
+          chartRect.bottom - (chartRect.height * verticalPositions[i]),
         ).translate(-painter.width, painter.height / -2),
       );
     }
 
+    // Draw horizontal axis text
     for (final TextPainter painter in horizontalPainters) {
       final i = horizontalPainters.indexOf(painter);
 
