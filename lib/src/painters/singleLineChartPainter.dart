@@ -108,7 +108,7 @@ class SingleLineChartPainter extends ChartPainter {
       rectangle,
       style.popupStyle.shadowColor,
       style.popupStyle.elevation,
-      true,
+      false,
     );
     canvas.drawPath(rectangle, rectanglePainter);
 
