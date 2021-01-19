@@ -10,7 +10,8 @@ class SingleLineChartPainter extends ChartPainter {
   final SingleLineChartStyle style;
   final Map<double, double> rawData;
   final List<double> keys;
-  final Function(Canvas canvas, Size size, Offset point) drawPoint;
+  final Function(Canvas canvas, Size size, Offset point, Offset drawablePoint)
+      drawPoint;
   final Function(Canvas canvas, Size size, Offset point) drawPopup;
 
   SingleLineChartPainter({
@@ -119,10 +120,12 @@ class SingleLineChartPainter extends ChartPainter {
   }
 
   // Draws onTap point
-  void _drawPoint(Canvas canvas, Size size, Offset point) {
-    // Convert percents to canvas coords
-    final Offset drawablePoint = _getPointFromOffset(point, size);
-
+  void _drawPoint(
+    Canvas canvas,
+    Size size,
+    Offset point,
+    Offset drawablePoint,
+  ) {
     // Create painters
     final outerPointPainter = new Paint()
       ..color = style.dataLineStyle.color
@@ -227,9 +230,10 @@ class SingleLineChartPainter extends ChartPainter {
   void drawTap(Canvas canvas, Size size) {
     // Get touch offset in percents of chart
     final Offset point = _getTapPoint(size);
+    final Offset drawablePoint = _getPointFromOffset(point, size);
 
     // Draw point and rectangle
-    (drawPoint ?? _drawPoint)(canvas, size, point);
+    (drawPoint ?? _drawPoint)(canvas, size, point, drawablePoint);
     (drawPopup ?? _drawPopup)(canvas, size, point);
   }
 
