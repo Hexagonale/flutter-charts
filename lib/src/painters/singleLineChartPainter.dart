@@ -275,6 +275,8 @@ class SingleLineChartPainter extends ChartPainter {
   // Draws onTap popup and point
   @override
   void drawTap(Canvas canvas, Size size) {
+    if (popupAnimationValue <= 0) return;
+
     // Get touch offset in percents of chart
     final Offset point = _getTapPoint(size);
     final Offset drawablePoint = _getPointFromOffset(point, size);
