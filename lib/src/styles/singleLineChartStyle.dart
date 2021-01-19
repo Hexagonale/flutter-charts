@@ -9,14 +9,24 @@ class SingleLineChartStyle extends ChartStyle {
   final PopupStyle popupStyle;
 
   const SingleLineChartStyle({
-    Color backgroundColor,
-    ChartLineStyle horizontalLinesStyle,
-    ChartLineStyle verticalLinesStyle,
-    int horizontalPointsCount,
-    int verticalPointsCount,
-    TextStyle horizontalAxisTextStyle,
-    TextStyle verticalAxisTextStyle,
-    EdgeInsets plotPadding,
+    Color backgroundColor = const Color(0xffffffff),
+    ChartLineStyle horizontalLinesStyle = const ChartLineStyle(
+      color: const Color(0xfff4f5f9),
+    ),
+    ChartLineStyle verticalLinesStyle = const ChartLineStyle(
+      draw: false,
+    ),
+    int horizontalPointsCount = 5,
+    int verticalPointsCount = 5,
+    TextStyle horizontalAxisTextStyle = const TextStyle(
+      color: const Color(0xff858b9f),
+      fontSize: 10,
+    ),
+    TextStyle verticalAxisTextStyle = const TextStyle(
+      color: const Color(0xff858b9f),
+      fontSize: 10,
+    ),
+    EdgeInsets plotPadding = const EdgeInsets.only(left: 10, bottom: 10),
     this.dataLineStyle = const ChartLineStyle(
       color: const Color(0xfffb6280),
     ),
