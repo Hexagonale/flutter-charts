@@ -30,8 +30,8 @@ class SingleLineChartPainter extends ChartPainter {
     Offset tap,
     @required this.style,
     @required this.rawData,
-    @required this.drawPoint,
-    @required this.drawPopup,
+    this.drawPoint,
+    this.drawPopup,
   })  : keys = rawData.keys.toList()..sort(),
         super(
           style: style,
