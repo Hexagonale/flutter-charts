@@ -138,10 +138,15 @@ class SingleLineChartPainter extends ChartPainter {
     canvas.drawCircle(drawablePoint, 4, pointPainter);
   }
 
+  Offset _getPointPercent(Offset point) => Offset(
+        (point.dx - chartRect.left) / chartRect.width,
+        (point.dy - chartRect.top) / chartRect.height,
+      );
+
   Offset _getTapPoint(Size size) {
     // Get percentage of touch in relation to chart
     // And limit it within space
-    final double tap = min(max(_getPercent(this.tap).dx, 0), 1);
+    final double tap = min(max(_getPointPercent(this.tap).dx, 0), 1);
 
     // Array for closests neighbours
     final List<double> neighbours = [];
@@ -189,11 +194,6 @@ class SingleLineChartPainter extends ChartPainter {
   Offset _getPointFromOffset(Offset offset, Size size) => Offset(
         (offset.dx * chartRect.width) + chartRect.left,
         chartRect.height - (offset.dy * chartRect.height) + chartRect.top,
-      );
-
-  Offset _getPercent(Offset point) => Offset(
-        (point.dx - chartRect.left) / chartRect.width,
-        (point.dy - chartRect.top) / chartRect.height,
       );
 
   // Draws data line
