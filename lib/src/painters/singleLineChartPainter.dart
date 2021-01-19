@@ -28,7 +28,8 @@ class SingleLineChartPainter extends ChartPainter {
     @required Function(double) getHorizontalAxis,
     bool allowPopupOverflow = false,
     Offset tap,
-    double animationValue,
+    double animationValue = 0,
+    double popupAnimationValue = 0,
     @required this.style,
     @required this.rawData,
     this.drawPoint,
@@ -42,6 +43,7 @@ class SingleLineChartPainter extends ChartPainter {
           tap: tap,
           horizontalLinesAnimationValue: animationValue,
           verticalLinesAnimationValue: animationValue,
+          popupAnimationValue: popupAnimationValue,
         );
 
   // Draws onTap popup

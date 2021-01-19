@@ -12,7 +12,9 @@ abstract class ChartPainter extends CustomPainter {
   final Function(double) getVerticalAxis, getHorizontalAxis;
   final Offset tap;
   final bool allowPopupOverflow;
-  final double horizontalLinesAnimationValue, verticalLinesAnimationValue;
+  final double horizontalLinesAnimationValue;
+  final double verticalLinesAnimationValue;
+  final double popupAnimationValue;
 
   EdgeInsets chartSpaceMargin = const EdgeInsets.all(0);
   Rect chartRect = Rect.zero;
@@ -25,6 +27,7 @@ abstract class ChartPainter extends CustomPainter {
     @required this.tap,
     @required this.horizontalLinesAnimationValue,
     @required this.verticalLinesAnimationValue,
+    @required this.popupAnimationValue,
   });
 
   // Draws horzontal plot lines
