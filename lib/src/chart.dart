@@ -5,9 +5,9 @@ import 'package:flutter/material.dart';
 
 import 'data/normalize.dart';
 import 'data/smoothing/linear.dart';
-import 'painters/chart.dart';
 import 'styles/popupStyle.dart';
 import 'styles/singleLineChartStyle.dart';
+import 'painters/singleLineChartPainter.dart';
 
 class Chart extends StatefulWidget {
   final SingleLineChartStyle style;
@@ -75,7 +75,7 @@ class _ChartState extends State<Chart> {
           child: Container(
             color: Colors.white,
             child: CustomPaint(
-              painter: ChartPainter(
+              painter: SingleLineChartPainter(
                 style: SingleLineChartStyle(
                   popupStyle: PopupStyle(
                     size: Size(80, 50),
