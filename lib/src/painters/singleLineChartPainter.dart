@@ -31,42 +31,6 @@ class SingleLineChartPainter extends ChartPainter {
           tap: tap,
         );
 
-  // Draws data line
-  @override
-  void drawChart(Canvas canvas, Size size) {
-    final Paint dataPaint = Paint()
-      ..color = style.dataLineStyle.color
-      ..strokeWidth = style.dataLineStyle.width
-      ..style = PaintingStyle.stroke;
-
-    final Path path = Path();
-
-    final start = _getPointFromKey(keys.first, size);
-    path.moveTo(start.dx, start.dy);
-
-    // Offset last = _getPointFromKey(keys.first, size);
-
-    for (final double key in keys.getRange(1, keys.length)) {
-      final Offset point = _getPointFromKey(key, size);
-      path.lineTo(point.dx, point.dy);
-      // canvas.drawLine(last, point, dataPaint);
-      // last = point;
-    }
-
-    canvas.drawPath(path, dataPaint);
-  }
-
-  // Draws onTap popup and point
-  @override
-  void drawTap(Canvas canvas, Size size) {
-    // Get touch offset in percents of usable space
-    final Offset point = _getTapPercentage(size);
-
-    // Draw point and rectangle
-    (drawPoint ?? _drawPoint)(canvas, size, point);
-    (drawPopup ?? _drawPopup)(canvas, size, point);
-  }
-
   // Draws onTap popup
   void _drawPopup(Canvas canvas, Size size, Offset point) {
     // Create rectangle painter
@@ -242,6 +206,42 @@ class SingleLineChartPainter extends ChartPainter {
       (point.dx - chartRect.left) / chartRect.width,
       (point.dy - chartRect.top) / chartRect.height,
     );
+  }
+
+  // Draws data line
+  @override
+  void drawChart(Canvas canvas, Size size) {
+    final Paint dataPaint = Paint()
+      ..color = style.dataLineStyle.color
+      ..strokeWidth = style.dataLineStyle.width
+      ..style = PaintingStyle.stroke;
+
+    final Path path = Path();
+
+    final start = _getPointFromKey(keys.first, size);
+    path.moveTo(start.dx, start.dy);
+
+    // Offset last = _getPointFromKey(keys.first, size);
+
+    for (final double key in keys.getRange(1, keys.length)) {
+      final Offset point = _getPointFromKey(key, size);
+      path.lineTo(point.dx, point.dy);
+      // canvas.drawLine(last, point, dataPaint);
+      // last = point;
+    }
+
+    canvas.drawPath(path, dataPaint);
+  }
+
+  // Draws onTap popup and point
+  @override
+  void drawTap(Canvas canvas, Size size) {
+    // Get touch offset in percents of usable space
+    final Offset point = _getTapPercentage(size);
+
+    // Draw point and rectangle
+    (drawPoint ?? _drawPoint)(canvas, size, point);
+    (drawPopup ?? _drawPopup)(canvas, size, point);
   }
 
   @override
