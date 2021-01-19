@@ -203,7 +203,7 @@ class SingleLineChartPainter extends ChartPainter {
         center.dy + (size.height / 2),
       );
 
-  Offset _getPointFromKey(double key, Size size) => Offset(
+  Offset _getPointFromKey(double key) => Offset(
         (key * chartRect.width) + chartRect.left,
         chartRect.height - (rawData[key] * chartRect.height) + chartRect.top,
       );
@@ -223,16 +223,12 @@ class SingleLineChartPainter extends ChartPainter {
 
     final Path path = Path();
 
-    final start = _getPointFromKey(keys.first, size);
+    final start = _getPointFromKey(keys.first);
     path.moveTo(start.dx, start.dy);
 
-    // Offset last = _getPointFromKey(keys.first, size);
-
     for (final double key in keys.getRange(1, keys.length)) {
-      final Offset point = _getPointFromKey(key, size);
+      final Offset point = _getPointFromKey(key);
       path.lineTo(point.dx, point.dy);
-      // canvas.drawLine(last, point, dataPaint);
-      // last = point;
     }
 
     canvas.drawPath(path, dataPaint);
