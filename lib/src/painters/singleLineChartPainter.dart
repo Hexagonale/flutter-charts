@@ -243,4 +243,15 @@ class SingleLineChartPainter extends ChartPainter {
       (point.dy - chartRect.top) / chartRect.height,
     );
   }
+
+  @override
+  bool shouldRepaint(covariant SingleLineChartPainter oldDelegate) {
+    if (oldDelegate.style != style) return true;
+    if (oldDelegate.rawData != rawData) return true;
+    if (oldDelegate.drawPoint != drawPoint) return true;
+    if (oldDelegate.drawPopup != drawPopup) return true;
+    if (super.shouldRepaint(oldDelegate)) return true;
+
+    return false;
+  }
 }
