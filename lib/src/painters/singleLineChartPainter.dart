@@ -138,6 +138,7 @@ class SingleLineChartPainter extends ChartPainter {
     canvas.drawCircle(drawablePoint, 4, pointPainter);
   }
 
+  // Returns point percentage position in relation to chart
   Offset _getPointPercent(Offset point) => Offset(
         (point.dx - chartRect.left) / chartRect.width,
         (point.dy - chartRect.top) / chartRect.height,
