@@ -32,8 +32,8 @@ class _ChartState extends State<Chart> with SingleTickerProviderStateMixin {
   Map<double, double> smooth = Map();
   Offset tap;
   double lastValue;
-  Animation introAnimation;
-  AnimationController introAnimationController;
+  Animation introAnimation, popupAnimation;
+  AnimationController introAnimationController, popupAnimationController;
 
   @override
   void initState() {
@@ -44,6 +44,14 @@ class _ChartState extends State<Chart> with SingleTickerProviderStateMixin {
       duration: Duration(milliseconds: 1500),
     );
     introAnimation = CurvedAnimation(
+      curve: Curves.easeInOut,
+      parent: introAnimationController,
+    );
+    popupAnimationController = AnimationController(
+      vsync: this,
+      duration: Duration(milliseconds: 500),
+    );
+    popupAnimation = CurvedAnimation(
       curve: Curves.easeInOut,
       parent: introAnimationController,
     );
@@ -102,15 +110,13 @@ class _ChartState extends State<Chart> with SingleTickerProviderStateMixin {
               builder: (BuildContext context, Widget child) => CustomPaint(
                 painter: SingleLineChartPainter(
                   style: SingleLineChartStyle(
-                    popupStyle: PopupStyle(
-                      size: Size(80, 50),
-                    ),
-                    verticalLinesStyle: ChartLineStyle(
-                      color: Colors.black,
-                      draw: true,
-                      width: 1
-                    )
-                  ), //widget.style,
+                      popupStyle: PopupStyle(
+                        size: Size(80, 50),
+                      ),
+                      verticalLinesStyle: ChartLineStyle(
+                          color: Colors.black,
+                          draw: true,
+                          width: 1)), //widget.style,
                   getHorizontalAxis: getHorizontalAxis,
                   getVerticalAxis: getVerticalAxis,
                   rawData: smooth,
