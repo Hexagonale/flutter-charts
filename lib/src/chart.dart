@@ -86,7 +86,7 @@ class _ChartState extends State<Chart> with TickerProviderStateMixin {
       smooth = normalize(widget.data);
       smooth = linear(widget.data, 20, widget.value);
 
-      introAnimationController.forward(from: 0);
+      if (data != widget.data) introAnimationController.forward(from: 0);
 
       lastValue = widget.value;
       data = widget.data;
