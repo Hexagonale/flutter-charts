@@ -1,5 +1,6 @@
 import 'dart:ui';
 
+import 'package:charts/src/styles/chartLineStyle.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
@@ -104,6 +105,11 @@ class _ChartState extends State<Chart> with SingleTickerProviderStateMixin {
                     popupStyle: PopupStyle(
                       size: Size(80, 50),
                     ),
+                    verticalLinesStyle: ChartLineStyle(
+                      color: Colors.black,
+                      draw: true,
+                      width: 1
+                    )
                   ), //widget.style,
                   getHorizontalAxis: getHorizontalAxis,
                   getVerticalAxis: getVerticalAxis,

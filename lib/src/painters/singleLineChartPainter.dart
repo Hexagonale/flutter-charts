@@ -40,7 +40,8 @@ class SingleLineChartPainter extends ChartPainter {
           getHorizontalAxis: getHorizontalAxis,
           allowPopupOverflow: allowPopupOverflow,
           tap: tap,
-          animationValue: animationValue,
+          horizontalLinesAnimationValue: animationValue,
+          verticalLinesAnimationValue: animationValue,
         );
 
   // Draws onTap popup
@@ -228,7 +229,8 @@ class SingleLineChartPainter extends ChartPainter {
     final start = _getPointFromKey(keys.first);
     path.moveTo(start.dx, start.dy);
 
-    final int maxKey = (keys.length * (animationValue ?? 1)).ceil();
+    final int maxKey =
+        (keys.length * (horizontalLinesAnimationValue ?? 1)).ceil();
     for (int i = 1; i < maxKey; i++) {
       final Offset point = _getPointFromKey(keys[i]);
       path.lineTo(point.dx, point.dy);
