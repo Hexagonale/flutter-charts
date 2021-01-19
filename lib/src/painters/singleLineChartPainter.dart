@@ -138,7 +138,7 @@ class SingleLineChartPainter extends ChartPainter {
     canvas.drawCircle(drawablePoint, 4, pointPainter);
   }
 
-  Offset _getTapPercentage(Size size) {
+  Offset _getTapPoint(Size size) {
     // Get percentage of touch in relation to chart
     // And limit iit within space
     final double tap = min(max(_getPercent(this.tap, size).dx, 0), 1);
@@ -225,7 +225,7 @@ class SingleLineChartPainter extends ChartPainter {
   @override
   void drawTap(Canvas canvas, Size size) {
     // Get touch offset in percents of chart
-    final Offset point = _getTapPercentage(size);
+    final Offset point = _getTapPoint(size);
 
     // Draw point and rectangle
     (drawPoint ?? _drawPoint)(canvas, size, point);
