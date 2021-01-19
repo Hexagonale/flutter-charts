@@ -226,8 +226,8 @@ class SingleLineChartPainter extends ChartPainter {
     final start = _getPointFromKey(keys.first);
     path.moveTo(start.dx, start.dy);
 
-    for (final double key in keys.getRange(1, keys.length)) {
-      final Offset point = _getPointFromKey(key);
+    for (int i = 1; i < keys.length; i++) {
+      final Offset point = _getPointFromKey(keys[i]);
       path.lineTo(point.dx, point.dy);
     }
 
