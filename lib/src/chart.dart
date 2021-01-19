@@ -110,13 +110,15 @@ class _ChartState extends State<Chart> with SingleTickerProviderStateMixin {
               builder: (BuildContext context, Widget child) => CustomPaint(
                 painter: SingleLineChartPainter(
                   style: SingleLineChartStyle(
-                      popupStyle: PopupStyle(
-                        size: Size(80, 50),
-                      ),
-                      verticalLinesStyle: ChartLineStyle(
-                          color: Colors.black,
-                          draw: true,
-                          width: 1)), //widget.style,
+                    popupStyle: PopupStyle(
+                      size: Size(80, 50),
+                    ),
+                    verticalLinesStyle: ChartLineStyle(
+                      color: Colors.black,
+                      draw: true,
+                      width: 1,
+                    ),
+                  ), //widget.style,
                   getHorizontalAxis: getHorizontalAxis,
                   getVerticalAxis: getVerticalAxis,
                   rawData: smooth,
