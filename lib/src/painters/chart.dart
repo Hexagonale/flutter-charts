@@ -158,15 +158,10 @@ abstract class ChartPainter extends CustomPainter {
 
   @override
   void paint(Canvas canvas, Size size) {
-    try {
     _drawPlot(canvas, size);
     drawChart(canvas, size);
 
     if (tap != null) drawTap(canvas, size);
-    } catch(e, st) {
-      print(e);
-      print(st);
-    }
   }
 
   @override
