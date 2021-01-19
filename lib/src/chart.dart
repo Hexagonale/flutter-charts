@@ -1,3 +1,4 @@
+import 'dart:html';
 import 'dart:ui';
 
 import 'package:flutter/foundation.dart';
@@ -26,11 +27,31 @@ class Chart extends StatefulWidget {
   _ChartState createState() => _ChartState();
 }
 
-class _ChartState extends State<Chart> {
+class _ChartState extends State<Chart> with SingleTickerProviderStateMixin {
   Map<double, double> data;
   Map<double, double> smooth = Map();
   Offset tap;
   double lastValue;
+  Animation introAnimation;
+  AnimationController introAnimationController;
+
+  @override
+  void initState() {
+    super.initState();
+
+    introAnimationController = AnimationController(
+      vsync: this,
+      duration: Duration(milliseconds: 1500),
+    );
+    introAnimation = CurvedAnimation(
+      curve: Curves.easeInOut,
+      parent: introAnimationController,
+    );
+
+    WidgetsBinding.instance.addPostFrameCallback(
+      (_) => introAnimationController.forward(),
+    );
+  }
 
   String getHorizontalAxis(double percent) {
     final DateTime target = DateTime.now()
@@ -74,18 +95,22 @@ class _ChartState extends State<Chart> {
           onPanEnd: (details) => setState(() => tap = null),
           child: Container(
             color: Colors.white,
-            child: CustomPaint(
-              painter: SingleLineChartPainter(
-                style: SingleLineChartStyle(
-                  popupStyle: PopupStyle(
-                    size: Size(80, 50),
-                  ),
-                ), //widget.style,
-                getHorizontalAxis: getHorizontalAxis,
-                getVerticalAxis: getVerticalAxis,
-                rawData: smooth,
-                tap: tap,
-                allowPopupOverflow: widget.allowPopupOverflow,
+            child: AnimatedBuilder(
+              animation: introAnimation,
+              builder: (BuildContext context, Widget child) => CustomPaint(
+                painter: SingleLineChartPainter(
+                  style: SingleLineChartStyle(
+                    popupStyle: PopupStyle(
+                      size: Size(80, 50),
+                    ),
+                  ), //widget.style,
+                  getHorizontalAxis: getHorizontalAxis,
+                  getVerticalAxis: getVerticalAxis,
+                  rawData: smooth,
+                  tap: tap,
+                  allowPopupOverflow: widget.allowPopupOverflow,
+                  animationValue: introAnimation.value,
+                ),
               ),
             ),
           ),
