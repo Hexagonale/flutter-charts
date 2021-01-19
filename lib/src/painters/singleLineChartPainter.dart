@@ -12,7 +12,8 @@ class SingleLineChartPainter extends ChartPainter {
   final List<double> keys;
   final Function(Canvas canvas, Size size, Offset point, Offset drawablePoint)
       drawPoint;
-  final Function(Canvas canvas, Size size, Offset point) drawPopup;
+  final Function(Canvas canvas, Size size, Offset point, Offset drawablePoint)
+      drawPopup;
 
   SingleLineChartPainter({
     @required Function(double) getVerticalAxis,
@@ -33,9 +34,14 @@ class SingleLineChartPainter extends ChartPainter {
         );
 
   // Draws onTap popup
-  void _drawPopup(Canvas canvas, Size size, Offset point) {
+  void _drawPopup(
+    Canvas canvas,
+    Size size,
+    Offset point,
+    Offset drawablePoint,
+  ) {
     // Create rectangle painter
-    final rectanglePainter = new Paint()
+    final Paint rectanglePainter = new Paint()
       ..color = style.popupStyle.color
       ..style = PaintingStyle.fill;
 
@@ -63,34 +69,33 @@ class SingleLineChartPainter extends ChartPainter {
         );
 
     // Convert percents to canvas coords
-    Offset drawablePoint = _getPointFromOffset(point, size).translate(
-      0,
-      -20 - (bgSize.height / 2),
-    );
+    Offset popupCenter = drawablePoint.translate(0, -20 - (bgSize.height / 2));
 
     // Check if popup is overflowing canvas
     if (!allowPopupOverflow) {
-      if (drawablePoint.dy - (bgSize.height / 2) < 0)
-        drawablePoint = _getPointFromOffset(point, size).translate(
-          0,
-          20 + (bgSize.height / 2),
-        );
-      if (drawablePoint.dx - (bgSize.width / 2) < 0)
-        drawablePoint = drawablePoint.translate(
-          -drawablePoint.dx + (bgSize.width / 2),
-          0,
-        );
-      if (drawablePoint.dx + (bgSize.width / 2) > size.width)
-        drawablePoint = drawablePoint.translate(
-          size.width - drawablePoint.dx - (bgSize.width / 2),
+      if (popupCenter.dy - (bgSize.height / 2) < 0) {
+        popupCenter = drawablePoint.translate(0, 20 + (bgSize.height / 2));
+      }
+
+      if (popupCenter.dx - (bgSize.width / 2) < 0) {
+        popupCenter = popupCenter.translate(
+          -popupCenter.dx + (bgSize.width / 2),
           0,
         );
+      }
+
+      if (popupCenter.dx + (bgSize.width / 2) > size.width) {
+        popupCenter = popupCenter.translate(
+          size.width - popupCenter.dx - (bgSize.width / 2),
+          0,
+        );
+      }
     }
 
     // Create rects
-    final Rect textRect = _sizeAndCenterToRect(textSize, drawablePoint);
+    final Rect textRect = _sizeAndCenterToRect(textSize, popupCenter);
     final RRect bgRect = RRect.fromRectAndCorners(
-      _sizeAndCenterToRect(bgSize, drawablePoint),
+      _sizeAndCenterToRect(bgSize, popupCenter),
       topLeft: style.popupStyle.borderRadius.topLeft,
       bottomLeft: style.popupStyle.borderRadius.bottomLeft,
       bottomRight: style.popupStyle.borderRadius.bottomRight,
@@ -234,7 +239,7 @@ class SingleLineChartPainter extends ChartPainter {
 
     // Draw point and rectangle
     (drawPoint ?? _drawPoint)(canvas, size, point, drawablePoint);
-    (drawPopup ?? _drawPopup)(canvas, size, point);
+    (drawPopup ?? _drawPopup)(canvas, size, point, drawablePoint);
   }
 
   @override
