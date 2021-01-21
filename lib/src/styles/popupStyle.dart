@@ -15,7 +15,7 @@ class PopupStyle {
     this.shadowColor = const Color(0x67000000),
     this.elevation = 1.5,
     this.padding = const EdgeInsets.symmetric(
-      horizontal: 40,
+      horizontal: 20,
       vertical: 10,
     ),
     this.size,
