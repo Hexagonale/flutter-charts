@@ -11,17 +11,26 @@ import 'styles/popupStyle.dart';
 import 'styles/singleLineChartStyle.dart';
 import 'painters/singleLineChartPainter.dart';
 
+//TODO find a better way to pass animation (maybe value and listener)
 class Chart extends StatefulWidget {
   final SingleLineChartStyle style;
   final allowPopupOverflow;
   final double value;
   final Map<double, double> data;
+  final AnimationController popupAnimationController;
+  final AnimationController dataIntroAnimationController;
+  final Animation popupAnimation;
+  final Animation dataIntroAnimation;
 
   const Chart({
     this.style = const SingleLineChartStyle(),
     this.allowPopupOverflow = false,
     @required this.value,
     @required this.data,
+    this.popupAnimationController,
+    this.dataIntroAnimationController,
+    this.popupAnimation,
+    this.dataIntroAnimation,
   });
 
   @override
@@ -33,32 +42,43 @@ class _ChartState extends State<Chart> with TickerProviderStateMixin {
   Map<double, double> smooth = Map();
   Offset tap;
   double lastValue;
-  Animation introAnimation, popupAnimation;
-  AnimationController introAnimationController, popupAnimationController;
+  Animation dataIntroAnimation, popupAnimation;
+  AnimationController dataIntroAnimationController, popupAnimationController;
 
   @override
   void initState() {
     super.initState();
 
-    introAnimationController = AnimationController(
-      vsync: this,
-      duration: Duration(milliseconds: 1500),
-    );
-    introAnimation = CurvedAnimation(
-      curve: Curves.easeInOut,
-      parent: introAnimationController,
-    );
-    popupAnimationController = AnimationController(
-      vsync: this,
-      duration: Duration(milliseconds: 225),
-    );
-    popupAnimation = CurvedAnimation(
-      curve: Curves.easeInOut,
-      parent: popupAnimationController,
-    );
+    if (widget.dataIntroAnimationController == null) {
+      dataIntroAnimationController = AnimationController(
+        vsync: this,
+        duration: Duration(milliseconds: 1500),
+      );
+      dataIntroAnimation = CurvedAnimation(
+        curve: Curves.easeInOut,
+        parent: dataIntroAnimationController,
+      );
+    } else {
+      dataIntroAnimationController = widget.dataIntroAnimationController;
+      dataIntroAnimation = widget.dataIntroAnimation;
+    }
+
+    if (widget.popupAnimationController == null) {
+      popupAnimationController = AnimationController(
+        vsync: this,
+        duration: Duration(milliseconds: 225),
+      );
+      popupAnimation = CurvedAnimation(
+        curve: Curves.easeInOut,
+        parent: popupAnimationController,
+      );
+    } else {
+      popupAnimationController = widget.popupAnimationController;
+      popupAnimation = widget.popupAnimation;
+    }
 
     WidgetsBinding.instance.addPostFrameCallback(
-      (_) => introAnimationController.forward(),
+      (_) => dataIntroAnimationController.forward(),
     );
   }
 
@@ -86,7 +106,7 @@ class _ChartState extends State<Chart> with TickerProviderStateMixin {
       smooth = normalize(widget.data);
       smooth = linear(widget.data, 20, widget.value);
 
-      if (data != widget.data) introAnimationController.forward(from: 0);
+      if (data != widget.data) dataIntroAnimationController.forward(from: 0);
 
       lastValue = widget.value;
       data = widget.data;
@@ -119,7 +139,7 @@ class _ChartState extends State<Chart> with TickerProviderStateMixin {
           child: Container(
             color: Colors.white,
             child: AnimatedBuilder(
-              animation: introAnimation,
+              animation: dataIntroAnimation,
               builder: (BuildContext context, Widget child) => AnimatedBuilder(
                 animation: popupAnimation,
                 builder: (BuildContext context, Widget child) => CustomPaint(
@@ -139,8 +159,8 @@ class _ChartState extends State<Chart> with TickerProviderStateMixin {
                     rawData: smooth,
                     tap: tap,
                     allowPopupOverflow: widget.allowPopupOverflow,
-                    animationValue: introAnimation.value,
-                    popupAnimationValue: popupAnimation.value,
+                    animationValue: dataIntroAnimationController.value,
+                    popupAnimationValue: popupAnimationController.value,
                   ),
                 ),
               ),

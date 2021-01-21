@@ -25,15 +25,36 @@ class Home extends StatefulWidget {
   _HomeState createState() => _HomeState();
 }
 
-class _HomeState extends State<Home> {
+class _HomeState extends State<Home> with TickerProviderStateMixin {
   double value = 0.5;
   int length = 200;
   Map<double, double> data = Map();
+  Animation popupAnimation;
+  Animation dataIntroAnimation;
+  AnimationController popupAnimationController;
+  AnimationController dataIntroAnimationController;
 
   @override
   void initState() {
     super.initState();
     data = getData();
+    popupAnimationController = AnimationController(
+      duration: Duration(milliseconds: 750),
+      vsync: this,
+    );
+    popupAnimation = CurvedAnimation(
+      curve: Curves.easeInCirc,
+      parent: popupAnimationController,
+    );
+
+    dataIntroAnimationController = AnimationController(
+      duration: Duration(milliseconds: 1750),
+      vsync: this,
+    );
+    dataIntroAnimation = CurvedAnimation(
+      curve: Curves.easeInCirc,
+      parent: dataIntroAnimationController,
+    );
   }
 
   Map<double, double> getData() {
@@ -68,12 +89,24 @@ class _HomeState extends State<Home> {
           Container(
             height: 350,
             padding: const EdgeInsets.all(16),
-            child: Chart(value: value, data: data),
+            child: Chart(
+              value: value,
+              data: data,
+              popupAnimationController: popupAnimationController,
+              popupAnimation: popupAnimation,
+              dataIntroAnimationController: dataIntroAnimationController,
+              dataIntroAnimation: dataIntroAnimation,
+            ),
           ),
           Slider(onChanged: (v) => setState(() => value = v), value: value),
           Row(
             children: [
-              Expanded(child: Slider(onChanged: (v) => setState(() => length = v.round()), value: length.toDouble(), min: 1, max: 8000)),
+              Expanded(
+                  child: Slider(
+                      onChanged: (v) => setState(() => length = v.round()),
+                      value: length.toDouble(),
+                      min: 1,
+                      max: 8000)),
               Text('$length'),
             ],
           ),
