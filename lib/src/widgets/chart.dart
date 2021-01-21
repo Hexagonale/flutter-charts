@@ -11,6 +11,8 @@ class Chart extends StatefulWidget {
   final SingleLineChartStyle style;
   final bool allowPopupOverflow;
   final SmoothingType smoothing;
+  final int width;
+  final double smoothness;
   final Function(double distance) weighting;
 
   const Chart({
@@ -21,6 +23,8 @@ class Chart extends StatefulWidget {
     this.style = const SingleLineChartStyle(),
     this.allowPopupOverflow = false,
   })  : smoothing = null,
+        width = null,
+        smoothness = null,
         weighting = null,
         super(key: key);
 
@@ -32,6 +36,8 @@ class Chart extends StatefulWidget {
     this.style = const SingleLineChartStyle(),
     this.allowPopupOverflow = false,
     this.smoothing = SmoothingType.Linear,
+    this.width = 20,
+    this.smoothness = 0.4,
     this.weighting,
   })  : assert(smoothing != SmoothingType.Custom || weighting != null),
         super(key: key);
@@ -42,6 +48,9 @@ class Chart extends StatefulWidget {
 
 class _ChartState extends State<Chart> {
   Map<double, double> data, smoothed;
+  int width;
+  double smoothness;
+  Function(double) weighting;
   bool popup = false;
 
   bool get smoothing => widget.smoothing != null;
@@ -49,16 +58,16 @@ class _ChartState extends State<Chart> {
   void smooth() {
     switch (widget.smoothing) {
       case SmoothingType.Linear:
-        smoothed = Smoothing.linear(data, 20, 0.3);
+        smoothed = Smoothing.linear(data, width, smoothness);
         break;
       case SmoothingType.LocalAverage:
-        smoothed = Smoothing.localAverage(data, 20);
+        smoothed = Smoothing.localAverage(data, width);
         break;
       case SmoothingType.Sigmoid:
-        smoothed = Smoothing.sigmoid(data, 20, 0.3);
+        smoothed = Smoothing.sigmoid(data, width, smoothness);
         break;
       case SmoothingType.Custom:
-        smoothed = Smoothing.custom(data, 20, widget.weighting);
+        smoothed = Smoothing.custom(data, width, weighting);
         break;
       default:
         smoothed = data;
@@ -70,8 +79,15 @@ class _ChartState extends State<Chart> {
 
   @override
   Widget build(BuildContext context) {
-    if (smoothing && widget.data != data) {
+    if (smoothing &&
+        (widget.data != data ||
+            widget.width != width ||
+            widget.smoothness != smoothness ||
+            widget.weighting != weighting)) {
       data = widget.data;
+      width = widget.width;
+      smoothness = widget.smoothness;
+      weighting = widget.weighting;
       smooth();
     }
 
