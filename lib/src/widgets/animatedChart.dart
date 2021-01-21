@@ -29,6 +29,20 @@ class AnimatedChart extends StatefulWidget {
     this.animateDataChange = true,
   }) : super(key: key);
 
+  const AnimatedChart.popup({
+    Key key,
+    @required this.data,
+    @required this.getHorizontalAxis,
+    @required this.getVerticalAxis,
+    this.style = const SingleLineChartStyle(),
+    this.allowPopupOverflow = false,
+  })  : animatePopup = true,
+        animateDataChange = false,
+        animateHorizontalLines = false,
+        animateVerticalLines = false,
+        this.animateData = false,
+        super(key: key);
+
   // TODO custom animated chart. Pass animations and controllers / callbacks
   // factory AnimatedChart.custom({
   //   Key key,
@@ -65,6 +79,7 @@ class _AnimatedChartState extends State<AnimatedChart>
   Animation dataIntroAnimation;
   Animation horizontalLinesAnimation;
   Animation verticalLinesAnimation;
+  double popup = 0;
 
   @override
   void initState() {
@@ -140,6 +155,20 @@ class _AnimatedChartState extends State<AnimatedChart>
     );
   }
 
+  void _showPopup() {
+    if (widget.animatePopup)
+      popupAnimationController.forward();
+    else
+      setState(() => popup = 1);
+  }
+
+  void _hidePopup() {
+    if (widget.animatePopup)
+      popupAnimationController.reverse();
+    else
+      setState(() => popup = 0);
+  }
+
   @override
   Widget build(BuildContext context) {
     if (widget.animateDataChange && data != widget.data) {
@@ -153,12 +182,12 @@ class _AnimatedChartState extends State<AnimatedChart>
       getHorizontalAxis: widget.getHorizontalAxis,
       getVerticalAxis: widget.getVerticalAxis,
       allowPopupOverflow: widget.allowPopupOverflow,
-      popup: popupAnimationController.value,
-      showPopup: () => popupAnimationController.forward(),
-      hidePopup: () => popupAnimationController.reverse(),
-      dataDrawProgress: dataIntroAnimation.value,
-      horizontalLinesDrawProgress: horizontalLinesAnimation.value,
-      verticalLinesDrawProgress: verticalLinesAnimation.value,
+      popup: popupAnimationController?.value ?? popup,
+      showPopup: _showPopup,
+      hidePopup: _hidePopup,
+      dataDrawProgress: dataIntroAnimation?.value ?? 1,
+      horizontalLinesDrawProgress: horizontalLinesAnimation?.value ?? 1,
+      verticalLinesDrawProgress: verticalLinesAnimation?.value ?? 1,
     );
   }
 }

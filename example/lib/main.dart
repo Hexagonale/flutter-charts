@@ -93,29 +93,15 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: <Widget>[
-          Container(
-            height: 350,
-            padding: const EdgeInsets.all(16),
-            child: Container(
-              decoration: BoxDecoration(
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.black.withOpacity(0.1),
-                    offset: Offset(0, 2),
-                    blurRadius: 4,
-                  ),
-                ],
-                color: Colors.black.withOpacity(0.1),
-                borderRadius: BorderRadius.circular(4),
-              ),
-              child: Padding(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 35, vertical: 40),
-                child: Chart.smooth(
+      body: SafeArea(
+        child: SingleChildScrollView(
+          physics: BouncingScrollPhysics(),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: <Widget>[
+              ChartCard(
+                chart: Chart.smooth(
                   data: data,
                   getHorizontalAxis: getHorizontalAxis,
                   getVerticalAxis: getVerticalAxis,
@@ -123,26 +109,54 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
                   smoothness: value,
                 ),
               ),
-            ),
-          ),
-          Slider(onChanged: (v) => setState(() => value = v), value: value),
-          Row(
-            children: [
-              Expanded(
-                  child: Slider(
-                      onChanged: (v) => setState(() => length = v.round()),
-                      value: length.toDouble(),
-                      min: 1,
-                      max: 8000)),
-              Text('$length'),
+              ChartCard(
+                chart: AnimatedChart.popup(
+                  data: data,
+                  getHorizontalAxis: getHorizontalAxis,
+                  getVerticalAxis: getVerticalAxis,
+                ),
+              ),
+              Slider(onChanged: (v) => setState(() => value = v), value: value),
+              Row(
+                children: [
+                  Expanded(
+                      child: Slider(
+                          onChanged: (v) => setState(() => length = v.round()),
+                          value: length.toDouble(),
+                          min: 1,
+                          max: 8000)),
+                  Text('$length'),
+                ],
+              ),
+              FlatButton(
+                child: Text('regenerate'),
+                onPressed: regenerate,
+              ),
             ],
           ),
-          FlatButton(
-            child: Text('regenerate'),
-            onPressed: regenerate,
-          ),
-        ],
+        ),
       ),
     );
   }
+}
+
+class ChartCard extends StatelessWidget {
+  final Widget chart;
+
+  const ChartCard({Key key, @required this.chart}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) => Container(
+        height: 350,
+        padding: const EdgeInsets.all(16),
+        child: Material(
+          elevation: 3,
+          color: Colors.grey.shade400,
+          borderRadius: BorderRadius.circular(4),
+          child: Padding(
+            padding: const EdgeInsets.all(30),
+            child: chart,
+          ),
+        ),
+      );
 }
