@@ -1,5 +1,6 @@
 import 'dart:math';
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:charts/charts.dart';
 
@@ -79,6 +80,16 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
     setState(() {});
   }
 
+  String getHorizontalAxis(double percent) {
+    final DateTime target = DateTime.now()
+        .add(lerpDuration(Duration(hours: -3), Duration.zero, percent));
+
+    return '${target.hour.toString().padLeft(2, '0')}:${target.minute.toString().padLeft(2, '0')}';
+  }
+
+  String getVerticalAxis(double percent) =>
+      '${((percent * 100 * 100).round() / 100)}%';
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -89,13 +100,28 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
           Container(
             height: 350,
             padding: const EdgeInsets.all(16),
-            child: Chart(
-              value: value,
-              data: data,
-              popupAnimationController: popupAnimationController,
-              popupAnimation: popupAnimation,
-              dataIntroAnimationController: dataIntroAnimationController,
-              dataIntroAnimation: dataIntroAnimation,
+            child: Container(
+              decoration: BoxDecoration(
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.black.withOpacity(0.1),
+                    offset: Offset(0, 2),
+                    blurRadius: 4,
+                  ),
+                ],
+                color: Colors.black.withOpacity(0.1),
+                borderRadius: BorderRadius.circular(4),
+              ),
+              child: Padding(
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 35, vertical: 40),
+                child: Chart.smooth(
+                  data: data,
+                  getHorizontalAxis: getHorizontalAxis,
+                  getVerticalAxis: getVerticalAxis,
+                  smoothing: SmoothingType.Sigmoid,
+                ),
+              ),
             ),
           ),
           Slider(onChanged: (v) => setState(() => value = v), value: value),

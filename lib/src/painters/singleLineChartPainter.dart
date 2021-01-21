@@ -25,18 +25,21 @@ class SingleLineChartPainter extends ChartPainter {
     double animationValue,
   ) drawPopup;
   final double popupAnimationValue;
+  final double dataIntroAnimationValue;
 
   SingleLineChartPainter({
     @required Function(double) getVerticalAxis,
     @required Function(double) getHorizontalAxis,
     bool allowPopupOverflow = false,
     Offset tap,
-    double animationValue = 0,
+    double horizontalLinesAnimationValue = 0,
+    double verticalLinesAnimationValue = 0,
     @required this.style,
     @required this.rawData,
     this.drawPoint,
     this.drawPopup,
     this.popupAnimationValue = 0,
+    this.dataIntroAnimationValue = 1,
   })  : keys = rawData.keys.toList()..sort(),
         super(
           style: style,
@@ -44,8 +47,8 @@ class SingleLineChartPainter extends ChartPainter {
           getHorizontalAxis: getHorizontalAxis,
           allowPopupOverflow: allowPopupOverflow,
           tap: tap,
-          horizontalLinesAnimationValue: animationValue,
-          verticalLinesAnimationValue: animationValue,
+          horizontalLinesAnimationValue: horizontalLinesAnimationValue,
+          verticalLinesAnimationValue: verticalLinesAnimationValue,
         );
 
   // Draws onTap popup
@@ -262,8 +265,7 @@ class SingleLineChartPainter extends ChartPainter {
     final start = _getPointFromKey(keys.first);
     path.moveTo(start.dx, start.dy);
 
-    final int maxKey =
-        (keys.length * (horizontalLinesAnimationValue ?? 1)).ceil();
+    final int maxKey = (keys.length * (dataIntroAnimationValue ?? 1)).ceil();
     for (int i = 1; i < maxKey; i++) {
       final Offset point = _getPointFromKey(keys[i]);
       path.lineTo(point.dx, point.dy);
