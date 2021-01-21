@@ -3,9 +3,7 @@ import 'dart:ui';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
-import '../styles/popupStyle.dart';
 import '../styles/singleLineChartStyle.dart';
-import '../styles/chartLineStyle.dart';
 import '../painters/singleLineChartPainter.dart';
 
 class FlutterChart extends StatefulWidget {
