@@ -84,7 +84,7 @@ class SingleLineChartPainter extends ChartPainter {
     Size bgSize = style.popupStyle.size ??
         Size(
           textSize.width + style.popupStyle.padding.horizontal,
-          textSize.height + style.popupStyle.padding.vertical + 40,
+          textSize.height + style.popupStyle.padding.vertical,
         );
 
     // Convert percents to canvas coords
