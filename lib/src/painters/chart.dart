@@ -12,6 +12,8 @@ abstract class ChartPainter extends CustomPainter {
   final Function(double) getVerticalAxis, getHorizontalAxis;
   final Offset tap;
   final bool allowPopupOverflow;
+  final double horizontalLinesAnimationValue;
+  final double verticalLinesAnimationValue;
 
   EdgeInsets chartSpaceMargin = const EdgeInsets.all(0);
   Rect chartRect = Rect.zero;
@@ -22,6 +24,8 @@ abstract class ChartPainter extends CustomPainter {
     @required this.getHorizontalAxis,
     @required this.allowPopupOverflow,
     @required this.tap,
+    @required this.horizontalLinesAnimationValue,
+    @required this.verticalLinesAnimationValue,
   });
 
   // Draws horzontal plot lines
@@ -35,7 +39,7 @@ abstract class ChartPainter extends CustomPainter {
 
       canvas.drawLine(
         Offset(rect.left, l),
-        Offset(rect.right, l),
+        Offset(rect.left + (rect.width * horizontalLinesAnimationValue), l),
         linePaint,
       );
     }
@@ -51,7 +55,7 @@ abstract class ChartPainter extends CustomPainter {
       final double l = rect.left + (rect.width * i);
 
       canvas.drawLine(
-        Offset(l, rect.top),
+        Offset(l, rect.bottom - (rect.height * verticalLinesAnimationValue)),
         Offset(l, rect.bottom),
         linePaint,
       );
@@ -168,9 +172,13 @@ abstract class ChartPainter extends CustomPainter {
   bool shouldRepaint(covariant ChartPainter oldDelegate) {
     if (oldDelegate.style != style) return true;
     if (oldDelegate.getVerticalAxis != getVerticalAxis) return true;
-    if (oldDelegate.tap.dx != tap.dx) return true;
-    if (oldDelegate.tap.dy != tap.dy) return true;
+    if (oldDelegate.tap?.dx != tap?.dx) return true;
+    if (oldDelegate.tap?.dy != tap?.dy) return true;
     if (oldDelegate.allowPopupOverflow != allowPopupOverflow) return true;
+    if (oldDelegate.horizontalLinesAnimationValue !=
+        horizontalLinesAnimationValue) return true;
+    if (oldDelegate.verticalLinesAnimationValue != verticalLinesAnimationValue)
+      return true;
 
     return false;
   }

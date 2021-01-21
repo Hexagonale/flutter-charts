@@ -15,23 +15,31 @@ class SingleLineChartPainter extends ChartPainter {
     Size size,
     Offset point,
     Offset drawablePoint,
+    double animationValue,
   ) drawPoint;
   final Function(
     Canvas canvas,
     Size size,
     Offset point,
     Offset drawablePoint,
+    double animationValue,
   ) drawPopup;
+  final double popupAnimationValue;
+  final double dataIntroAnimationValue;
 
   SingleLineChartPainter({
     @required Function(double) getVerticalAxis,
     @required Function(double) getHorizontalAxis,
     bool allowPopupOverflow = false,
     Offset tap,
+    double horizontalLinesAnimationValue = 0,
+    double verticalLinesAnimationValue = 0,
     @required this.style,
     @required this.rawData,
     this.drawPoint,
     this.drawPopup,
+    this.popupAnimationValue = 0,
+    this.dataIntroAnimationValue = 1,
   })  : keys = rawData.keys.toList()..sort(),
         super(
           style: style,
@@ -39,6 +47,8 @@ class SingleLineChartPainter extends ChartPainter {
           getHorizontalAxis: getHorizontalAxis,
           allowPopupOverflow: allowPopupOverflow,
           tap: tap,
+          horizontalLinesAnimationValue: horizontalLinesAnimationValue,
+          verticalLinesAnimationValue: verticalLinesAnimationValue,
         );
 
   // Draws onTap popup
@@ -47,6 +57,7 @@ class SingleLineChartPainter extends ChartPainter {
     Size size,
     Offset point,
     Offset drawablePoint,
+    double animationValue,
   ) {
     // Create rectangle painter
     final Paint rectanglePainter = new Paint()
@@ -70,10 +81,10 @@ class SingleLineChartPainter extends ChartPainter {
       max(yPainter.width, xPainter.width),
       yPainter.height + style.popupStyle.textSpacing + xPainter.height,
     );
-    final Size bgSize = style.popupStyle.size ??
+    Size bgSize = style.popupStyle.size ??
         Size(
           textSize.width + style.popupStyle.padding.horizontal,
-          textSize.height + style.popupStyle.padding.vertical + 40,
+          textSize.height + style.popupStyle.padding.vertical,
         );
 
     // Convert percents to canvas coords
@@ -100,6 +111,20 @@ class SingleLineChartPainter extends ChartPainter {
       }
     }
 
+    if (animationValue != 1) {
+      final double originalHeight = bgSize.height;
+
+      bgSize = Size(
+        bgSize.width * animationValue,
+        bgSize.height * animationValue,
+      );
+
+      if (popupCenter.dy > drawablePoint.dy)
+        popupCenter = popupCenter.translate(0, bgSize.height - originalHeight);
+      else
+        popupCenter = popupCenter.translate(0, originalHeight - bgSize.height);
+    }
+
     // Create rects
     final Rect textRect = _sizeAndCenterToRect(textSize, popupCenter);
     final RRect bgRect = RRect.fromRectAndCorners(
@@ -120,6 +145,7 @@ class SingleLineChartPainter extends ChartPainter {
     );
     canvas.drawPath(rectangle, rectanglePainter);
 
+    if (animationValue < 0.8) return;
     // Draw texts
     yPainter.paint(
       canvas,
@@ -138,6 +164,7 @@ class SingleLineChartPainter extends ChartPainter {
     Size size,
     Offset point,
     Offset drawablePoint,
+    double animationValue,
   ) {
     // Create painters
     final outerPointPainter = new Paint()
@@ -149,9 +176,21 @@ class SingleLineChartPainter extends ChartPainter {
       ..style = PaintingStyle.fill;
 
     // Draw circles
-    canvas.drawCircle(drawablePoint, 8, outerPointPainter);
-    canvas.drawCircle(drawablePoint, 4, outerPointPainter..strokeWidth = 1);
-    canvas.drawCircle(drawablePoint, 4, pointPainter);
+    canvas.drawCircle(
+      drawablePoint,
+      8 * animationValue,
+      outerPointPainter,
+    );
+    canvas.drawCircle(
+      drawablePoint,
+      4 * animationValue,
+      outerPointPainter..strokeWidth = 1,
+    );
+    canvas.drawCircle(
+      drawablePoint,
+      4 * animationValue,
+      pointPainter,
+    );
   }
 
   // Returns point percentage position in relation to chart
@@ -226,7 +265,8 @@ class SingleLineChartPainter extends ChartPainter {
     final start = _getPointFromKey(keys.first);
     path.moveTo(start.dx, start.dy);
 
-    for (int i = 1; i < keys.length; i++) {
+    final int maxKey = (keys.length * (dataIntroAnimationValue ?? 1)).ceil();
+    for (int i = 1; i < maxKey; i++) {
       final Offset point = _getPointFromKey(keys[i]);
       path.lineTo(point.dx, point.dy);
     }
@@ -237,13 +277,28 @@ class SingleLineChartPainter extends ChartPainter {
   // Draws onTap popup and point
   @override
   void drawTap(Canvas canvas, Size size) {
+    if (popupAnimationValue <= 0) return;
+
     // Get touch offset in percents of chart
     final Offset point = _getTapPoint(size);
     final Offset drawablePoint = _getPointFromOffset(point, size);
 
     // Draw point and rectangle
-    (drawPoint ?? _drawPoint)(canvas, size, point, drawablePoint);
-    (drawPopup ?? _drawPopup)(canvas, size, point, drawablePoint);
+    (drawPoint ?? _drawPoint)(
+      canvas,
+      size,
+      point,
+      drawablePoint,
+      popupAnimationValue,
+    );
+
+    (drawPopup ?? _drawPopup)(
+      canvas,
+      size,
+      point,
+      drawablePoint,
+      popupAnimationValue,
+    );
   }
 
   @override
@@ -252,6 +307,9 @@ class SingleLineChartPainter extends ChartPainter {
     if (oldDelegate.rawData != rawData) return true;
     if (oldDelegate.drawPoint != drawPoint) return true;
     if (oldDelegate.drawPopup != drawPopup) return true;
+    if (oldDelegate.popupAnimationValue != popupAnimationValue) return true;
+    if (oldDelegate.dataIntroAnimationValue != dataIntroAnimationValue)
+      return true;
     if (super.shouldRepaint(oldDelegate)) return true;
 
     return false;
