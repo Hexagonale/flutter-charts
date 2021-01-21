@@ -67,16 +67,7 @@ class _FlutterChartState extends State<FlutterChart>
           color: Colors.white,
           child: CustomPaint(
             painter: SingleLineChartPainter(
-              style: SingleLineChartStyle(
-                popupStyle: PopupStyle(
-                  size: Size(80, 50),
-                ),
-                verticalLinesStyle: ChartLineStyle(
-                  color: Colors.black,
-                  draw: true,
-                  width: 1,
-                ),
-              ), //widget.style,
+              style: widget.style, //widget.style,
               getHorizontalAxis: widget.getHorizontalAxis,
               getVerticalAxis: widget.getVerticalAxis,
               rawData: widget.data,
