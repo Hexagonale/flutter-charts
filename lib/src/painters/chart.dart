@@ -172,9 +172,13 @@ abstract class ChartPainter extends CustomPainter {
   bool shouldRepaint(covariant ChartPainter oldDelegate) {
     if (oldDelegate.style != style) return true;
     if (oldDelegate.getVerticalAxis != getVerticalAxis) return true;
-    if (oldDelegate.tap.dx != tap.dx) return true;
-    if (oldDelegate.tap.dy != tap.dy) return true;
+    if (oldDelegate.tap?.dx != tap?.dx) return true;
+    if (oldDelegate.tap?.dy != tap?.dy) return true;
     if (oldDelegate.allowPopupOverflow != allowPopupOverflow) return true;
+    if (oldDelegate.horizontalLinesAnimationValue !=
+        horizontalLinesAnimationValue) return true;
+    if (oldDelegate.verticalLinesAnimationValue != verticalLinesAnimationValue)
+      return true;
 
     return false;
   }

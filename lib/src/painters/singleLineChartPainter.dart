@@ -307,6 +307,9 @@ class SingleLineChartPainter extends ChartPainter {
     if (oldDelegate.rawData != rawData) return true;
     if (oldDelegate.drawPoint != drawPoint) return true;
     if (oldDelegate.drawPopup != drawPopup) return true;
+    if (oldDelegate.popupAnimationValue != popupAnimationValue) return true;
+    if (oldDelegate.dataIntroAnimationValue != dataIntroAnimationValue)
+      return true;
     if (super.shouldRepaint(oldDelegate)) return true;
 
     return false;
