@@ -27,7 +27,7 @@ abstract class ChartPainter extends CustomPainter {
     required this.verticalLinesAnimationValue,
   });
 
-  // Draws horzontal plot lines
+  /// Draws horzontal plot lines
   void _drawHorizontalLines(Canvas canvas, Rect rect, List<double> positions) {
     final Paint linePaint = Paint()
       ..color = style.horizontalLinesStyle!.color
@@ -44,7 +44,7 @@ abstract class ChartPainter extends CustomPainter {
     }
   }
 
-  // Draws vertical plot lines
+  /// Draws vertical plot lines
   void _drawVerticalLines(Canvas canvas, Rect rect, List<double> positions) {
     final Paint linePaint = Paint()
       ..color = style.verticalLinesStyle!.color
@@ -61,7 +61,7 @@ abstract class ChartPainter extends CustomPainter {
     }
   }
 
-  // Draws plot (vertical lins, horizontal lines, vertical axis and horizontal axis)
+  /// Draws plot (vertical lins, horizontal lines, vertical axis and horizontal axis)
   void _drawPlot(Canvas canvas, Size size) {
     // Generate vertical and horizontal positons
     final List<double> verticalPositions = List.generate(
@@ -151,10 +151,10 @@ abstract class ChartPainter extends CustomPainter {
         textDirection: ui.TextDirection.rtl,
       )..layout();
 
-  // Draws data line
+  /// Draws data line
   void drawChart(Canvas canvas, Size size);
 
-  // Draws onTap popup and point
+  /// Draws onTap popup and point
   void drawTap(Canvas canvas, Size size);
 
   @override
