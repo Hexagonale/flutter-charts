@@ -68,8 +68,7 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
 
     Map<double, double> data = Map();
 
-    for (final double v in values)
-      data.putIfAbsent(values.indexOf(v) / (values.length - 1), () => v);
+    for (final double v in values) data.putIfAbsent(values.indexOf(v) / (values.length - 1), () => v);
 
     return data;
   }
@@ -81,14 +80,12 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
   }
 
   String getHorizontalAxis(double percent) {
-    final DateTime target = DateTime.now()
-        .add(lerpDuration(Duration(hours: -3), Duration.zero, percent));
+    final DateTime target = DateTime.now().add(lerpDuration(Duration(hours: -3), Duration.zero, percent));
 
     return '${target.hour.toString().padLeft(2, '0')}:${target.minute.toString().padLeft(2, '0')}';
   }
 
-  String getVerticalAxis(double percent) =>
-      '${((percent * 100 * 100).round() / 100)}%';
+  String getVerticalAxis(double percent) => '${((percent * 100 * 100).round() / 100)}%';
 
   @override
   Widget build(BuildContext context) {
@@ -128,7 +125,7 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
                   Text('$length'),
                 ],
               ),
-              FlatButton(
+              TextButton(
                 child: Text('regenerate'),
                 onPressed: regenerate,
               ),

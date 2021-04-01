@@ -5,7 +5,7 @@ import 'custom.dart';
 /// returns map of smoothed points
 Map<double, double> linear(
   Map<double, double> input,
-  int width,
+  int? width,
   double smoothness,
 ) {
   smoothness += 0.001;

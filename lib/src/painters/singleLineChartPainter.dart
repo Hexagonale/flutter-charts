@@ -16,26 +16,26 @@ class SingleLineChartPainter extends ChartPainter {
     Offset point,
     Offset drawablePoint,
     double animationValue,
-  ) drawPoint;
+  )? drawPoint;
   final Function(
     Canvas canvas,
     Size size,
     Offset point,
     Offset drawablePoint,
     double animationValue,
-  ) drawPopup;
+  )? drawPopup;
   final double popupAnimationValue;
   final double dataIntroAnimationValue;
 
   SingleLineChartPainter({
-    @required Function(double) getVerticalAxis,
-    @required Function(double) getHorizontalAxis,
+    required Function(double) getVerticalAxis,
+    required Function(double) getHorizontalAxis,
     bool allowPopupOverflow = false,
-    Offset tap,
+    Offset? tap,
     double horizontalLinesAnimationValue = 0,
     double verticalLinesAnimationValue = 0,
-    @required this.style,
-    @required this.rawData,
+    required this.style,
+    required this.rawData,
     this.drawPoint,
     this.drawPopup,
     this.popupAnimationValue = 0,
@@ -172,7 +172,7 @@ class SingleLineChartPainter extends ChartPainter {
       ..strokeWidth = style.dataLineStyle.width
       ..style = PaintingStyle.stroke;
     final pointPainter = new Paint()
-      ..color = style.backgroundColor
+      ..color = style.backgroundColor!
       ..style = PaintingStyle.fill;
 
     // Draw circles
@@ -202,7 +202,7 @@ class SingleLineChartPainter extends ChartPainter {
   Offset _getTapPoint(Size size) {
     // Get percentage of touch in relation to chart
     // And limit it within space
-    final double tap = min(max(_getPointPercent(this.tap).dx, 0), 1);
+    final double tap = min(max(_getPointPercent(this.tap!).dx, 0), 1);
 
     // Array for closests neighbours
     final List<double> neighbours = [];
@@ -225,13 +225,12 @@ class SingleLineChartPainter extends ChartPainter {
     if (neighbours.length == 0) return Offset.zero;
 
     // Get percentage of touch beetwen them
-    final double percent =
-        (tap - neighbours[0]) / (neighbours[1] - neighbours[0]);
+    final double percent = (tap - neighbours[0]) / (neighbours[1] - neighbours[0]);
 
     // Return lerped offset
     return Offset(
       tap,
-      ui.lerpDouble(rawData[neighbours[0]], rawData[neighbours[1]], percent),
+      ui.lerpDouble(rawData[neighbours[0]], rawData[neighbours[1]], percent)!,
     );
   }
 
@@ -244,7 +243,7 @@ class SingleLineChartPainter extends ChartPainter {
 
   Offset _getPointFromKey(double key) => Offset(
         (key * chartRect.width) + chartRect.left,
-        chartRect.height - (rawData[key] * chartRect.height) + chartRect.top,
+        chartRect.height - (rawData[key]! * chartRect.height) + chartRect.top,
       );
 
   Offset _getPointFromOffset(Offset offset, Size size) => Offset(
@@ -265,7 +264,7 @@ class SingleLineChartPainter extends ChartPainter {
     final start = _getPointFromKey(keys.first);
     path.moveTo(start.dx, start.dy);
 
-    final int maxKey = (keys.length * (dataIntroAnimationValue ?? 1)).ceil();
+    final int maxKey = (keys.length * dataIntroAnimationValue).ceil();
     for (int i = 1; i < maxKey; i++) {
       final Offset point = _getPointFromKey(keys[i]);
       path.lineTo(point.dx, point.dy);
@@ -308,8 +307,7 @@ class SingleLineChartPainter extends ChartPainter {
     if (oldDelegate.drawPoint != drawPoint) return true;
     if (oldDelegate.drawPopup != drawPopup) return true;
     if (oldDelegate.popupAnimationValue != popupAnimationValue) return true;
-    if (oldDelegate.dataIntroAnimationValue != dataIntroAnimationValue)
-      return true;
+    if (oldDelegate.dataIntroAnimationValue != dataIntroAnimationValue) return true;
     if (super.shouldRepaint(oldDelegate)) return true;
 
     return false;

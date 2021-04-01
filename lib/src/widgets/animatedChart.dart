@@ -16,10 +16,10 @@ class AnimatedChart extends StatefulWidget {
   final bool animateDataChange;
 
   const AnimatedChart({
-    Key key,
-    @required this.data,
-    @required this.getHorizontalAxis,
-    @required this.getVerticalAxis,
+    Key? key,
+    required this.data,
+    required this.getHorizontalAxis,
+    required this.getVerticalAxis,
     this.style = const SingleLineChartStyle(),
     this.allowPopupOverflow = false,
     this.animatePopup = true,
@@ -30,10 +30,10 @@ class AnimatedChart extends StatefulWidget {
   }) : super(key: key);
 
   const AnimatedChart.popup({
-    Key key,
-    @required this.data,
-    @required this.getHorizontalAxis,
-    @required this.getVerticalAxis,
+    Key? key,
+    required this.data,
+    required this.getHorizontalAxis,
+    required this.getVerticalAxis,
     this.style = const SingleLineChartStyle(),
     this.allowPopupOverflow = false,
   })  : animatePopup = true,
@@ -70,15 +70,15 @@ class AnimatedChart extends StatefulWidget {
 
 class _AnimatedChartState extends State<AnimatedChart>
     with TickerProviderStateMixin {
-  Map<double, double> data;
-  AnimationController popupAnimationController;
-  AnimationController dataIntroAnimationController;
-  AnimationController horizontalLinesAnimationController;
-  AnimationController verticalLinesAnimationController;
-  Animation popupAnimation;
-  Animation dataIntroAnimation;
-  Animation horizontalLinesAnimation;
-  Animation verticalLinesAnimation;
+  Map<double, double>? data;
+  AnimationController? popupAnimationController;
+  late AnimationController dataIntroAnimationController;
+  late AnimationController horizontalLinesAnimationController;
+  late AnimationController verticalLinesAnimationController;
+  late Animation popupAnimation;
+  Animation? dataIntroAnimation;
+  Animation? horizontalLinesAnimation;
+  Animation? verticalLinesAnimation;
   double popup = 0;
 
   @override
@@ -98,7 +98,7 @@ class _AnimatedChartState extends State<AnimatedChart>
     );
     popupAnimation = CurvedAnimation(
       curve: Curves.easeInOut,
-      parent: popupAnimationController,
+      parent: popupAnimationController!,
     );
 
     popupAnimation.addListener(() => setState(() {}));
@@ -114,9 +114,9 @@ class _AnimatedChartState extends State<AnimatedChart>
       parent: dataIntroAnimationController,
     );
 
-    dataIntroAnimation.addListener(() => setState(() {}));
+    dataIntroAnimation!.addListener(() => setState(() {}));
 
-    WidgetsBinding.instance.addPostFrameCallback(
+    WidgetsBinding.instance!.addPostFrameCallback(
       (_) => dataIntroAnimationController.forward(),
     );
   }
@@ -131,9 +131,9 @@ class _AnimatedChartState extends State<AnimatedChart>
       parent: horizontalLinesAnimationController,
     );
 
-    horizontalLinesAnimation.addListener(() => setState(() {}));
+    horizontalLinesAnimation!.addListener(() => setState(() {}));
 
-    WidgetsBinding.instance.addPostFrameCallback(
+    WidgetsBinding.instance!.addPostFrameCallback(
       (_) => horizontalLinesAnimationController.forward(),
     );
   }
@@ -148,23 +148,23 @@ class _AnimatedChartState extends State<AnimatedChart>
       parent: verticalLinesAnimationController,
     );
 
-    verticalLinesAnimation.addListener(() => setState(() {}));
+    verticalLinesAnimation!.addListener(() => setState(() {}));
 
-    WidgetsBinding.instance.addPostFrameCallback(
+    WidgetsBinding.instance!.addPostFrameCallback(
       (_) => verticalLinesAnimationController.forward(),
     );
   }
 
   void _showPopup() {
     if (widget.animatePopup)
-      popupAnimationController.forward();
+      popupAnimationController!.forward();
     else
       setState(() => popup = 1);
   }
 
   void _hidePopup() {
     if (widget.animatePopup)
-      popupAnimationController.reverse();
+      popupAnimationController!.reverse();
     else
       setState(() => popup = 0);
   }

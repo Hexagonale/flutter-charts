@@ -10,10 +10,10 @@ double _sigmoid(double x, [double power = -1]) => 1 / (1 + pow(e, power * x));
 /// returns map of smoothed points
 Map<double, double> sigmoid(
   Map<double, double> input,
-  int width,
+  int? width,
   double smoothness,
 ) {
-  smoothness = lerpDouble(width, 0.0001, smoothness);
+  smoothness = lerpDouble(width, 0.0001, smoothness)!;
 
   return custom(
     input,

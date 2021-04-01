@@ -10,16 +10,16 @@ class Chart extends StatefulWidget {
   final Function(double) getVerticalAxis;
   final SingleLineChartStyle style;
   final bool allowPopupOverflow;
-  final SmoothingType smoothing;
-  final int width;
-  final double smoothness;
-  final Function(double distance) weighting;
+  final SmoothingType? smoothing;
+  final int? width;
+  final double? smoothness;
+  final Function(double distance)? weighting;
 
   const Chart({
-    Key key,
-    @required this.data,
-    @required this.getHorizontalAxis,
-    @required this.getVerticalAxis,
+    Key? key,
+    required this.data,
+    required this.getHorizontalAxis,
+    required this.getVerticalAxis,
     this.style = const SingleLineChartStyle(),
     this.allowPopupOverflow = false,
   })  : smoothing = null,
@@ -29,10 +29,10 @@ class Chart extends StatefulWidget {
         super(key: key);
 
   const Chart.smooth({
-    Key key,
-    @required this.data,
-    @required this.getHorizontalAxis,
-    @required this.getVerticalAxis,
+    Key? key,
+    required this.data,
+    required this.getHorizontalAxis,
+    required this.getVerticalAxis,
     this.style = const SingleLineChartStyle(),
     this.allowPopupOverflow = false,
     this.smoothing = SmoothingType.Linear,
@@ -47,10 +47,10 @@ class Chart extends StatefulWidget {
 }
 
 class _ChartState extends State<Chart> {
-  Map<double, double> data, smoothed;
-  int width;
-  double smoothness;
-  Function(double) weighting;
+  Map<double, double>? data, smoothed;
+  int? width;
+  double? smoothness;
+  Function(double)? weighting;
   bool popup = false;
 
   bool get smoothing => widget.smoothing != null;
@@ -58,16 +58,16 @@ class _ChartState extends State<Chart> {
   void smooth() {
     switch (widget.smoothing) {
       case SmoothingType.Linear:
-        smoothed = Smoothing.linear(data, width, smoothness);
+        smoothed = Smoothing.linear(data!, width, smoothness!);
         break;
       case SmoothingType.LocalAverage:
-        smoothed = Smoothing.localAverage(data, width);
+        smoothed = Smoothing.localAverage(data!, width);
         break;
       case SmoothingType.Sigmoid:
-        smoothed = Smoothing.sigmoid(data, width, smoothness);
+        smoothed = Smoothing.sigmoid(data!, width, smoothness!);
         break;
       case SmoothingType.Custom:
-        smoothed = Smoothing.custom(data, width, weighting);
+        smoothed = Smoothing.custom(data!, width, weighting);
         break;
       default:
         smoothed = data;
