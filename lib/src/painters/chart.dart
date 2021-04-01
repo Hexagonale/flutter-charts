@@ -10,7 +10,7 @@ import '../styles/chartStyle.dart';
 abstract class ChartPainter extends CustomPainter {
   final ChartStyle style;
   final Function(double) getVerticalAxis, getHorizontalAxis;
-  final Offset tap;
+  final Offset? tap;
   final bool allowPopupOverflow;
   final double horizontalLinesAnimationValue;
   final double verticalLinesAnimationValue;
@@ -19,20 +19,20 @@ abstract class ChartPainter extends CustomPainter {
   Rect chartRect = Rect.zero;
 
   ChartPainter({
-    @required this.style,
-    @required this.getVerticalAxis,
-    @required this.getHorizontalAxis,
-    @required this.allowPopupOverflow,
-    @required this.tap,
-    @required this.horizontalLinesAnimationValue,
-    @required this.verticalLinesAnimationValue,
+    required this.style,
+    required this.getVerticalAxis,
+    required this.getHorizontalAxis,
+    required this.allowPopupOverflow,
+    required this.tap,
+    required this.horizontalLinesAnimationValue,
+    required this.verticalLinesAnimationValue,
   });
 
   // Draws horzontal plot lines
   void _drawHorizontalLines(Canvas canvas, Rect rect, List<double> positions) {
     final Paint linePaint = Paint()
-      ..color = style.horizontalLinesStyle.color
-      ..strokeWidth = style.horizontalLinesStyle.width;
+      ..color = style.horizontalLinesStyle!.color
+      ..strokeWidth = style.horizontalLinesStyle!.width;
 
     for (final double i in positions) {
       final double l = rect.top + (rect.height * i);
@@ -48,8 +48,8 @@ abstract class ChartPainter extends CustomPainter {
   // Draws vertical plot lines
   void _drawVerticalLines(Canvas canvas, Rect rect, List<double> positions) {
     final Paint linePaint = Paint()
-      ..color = style.verticalLinesStyle.color
-      ..strokeWidth = style.verticalLinesStyle.width;
+      ..color = style.verticalLinesStyle!.color
+      ..strokeWidth = style.verticalLinesStyle!.width;
 
     for (final double i in positions) {
       final double l = rect.left + (rect.width * i);
@@ -66,12 +66,12 @@ abstract class ChartPainter extends CustomPainter {
   void _drawPlot(Canvas canvas, Size size) {
     // Generate vertical and horizontal positons
     final List<double> verticalPositions = List.generate(
-      style.verticalPointsCount,
-      (i) => 1 - (i / (style.verticalPointsCount - 1)),
+      style.verticalPointsCount!,
+      (i) => 1 - (i / (style.verticalPointsCount! - 1)),
     );
     final List<double> horizontalPositions = List.generate(
-      style.horizontalPointsCount,
-      (i) => i / (style.horizontalPointsCount - 1),
+      style.horizontalPointsCount!,
+      (i) => i / (style.horizontalPointsCount! - 1),
     );
 
     // Generate vertical and horizontal text painters
@@ -98,14 +98,14 @@ abstract class ChartPainter extends CustomPainter {
       right: verticalPainters.last.width / 2,
       bottom: horizontalPainters.fold(
             0.0,
-            (acc, e) => max<double>(acc, e.height),
+            (dynamic acc, e) => max<double>(acc, e.height),
           ) +
-          style.plotPadding.bottom,
+          style.plotPadding!.bottom,
       left: verticalPainters.fold(
             0.0,
-            (acc, e) => max<double>(acc, e.width),
+            (dynamic acc, e) => max<double>(acc, e.width),
           ) +
-          style.plotPadding.left,
+          style.plotPadding!.left,
     );
 
     // Calculate chart rect
@@ -117,9 +117,9 @@ abstract class ChartPainter extends CustomPainter {
     );
 
     // Draw horizontal and vertical lines if needed
-    if (style.verticalLinesStyle.draw)
+    if (style.verticalLinesStyle!.draw)
       _drawVerticalLines(canvas, chartRect, horizontalPositions);
-    if (style.horizontalLinesStyle.draw)
+    if (style.horizontalLinesStyle!.draw)
       _drawHorizontalLines(canvas, chartRect, verticalPositions);
 
     // Draw vertical axis text
@@ -129,7 +129,7 @@ abstract class ChartPainter extends CustomPainter {
       painter.paint(
         canvas,
         Offset(
-          chartRect.left - style.plotPadding.left,
+          chartRect.left - style.plotPadding!.left,
           chartRect.bottom - (chartRect.height * verticalPositions[i]),
         ).translate(-painter.width, painter.height / -2),
       );
@@ -143,13 +143,13 @@ abstract class ChartPainter extends CustomPainter {
         canvas,
         Offset(
           chartRect.left + chartRect.width * horizontalPositions[i],
-          chartRect.height + style.plotPadding.bottom,
+          chartRect.height + style.plotPadding!.bottom,
         ).translate(-painter.width / 2, painter.height / 2),
       );
     }
   }
 
-  TextPainter drawText(String text, TextStyle style) => TextPainter(
+  TextPainter drawText(String text, TextStyle? style) => TextPainter(
         text: TextSpan(text: text, style: style),
         textDirection: ui.TextDirection.rtl,
       )..layout();

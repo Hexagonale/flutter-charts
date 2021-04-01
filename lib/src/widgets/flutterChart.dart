@@ -7,7 +7,7 @@ import '../styles/singleLineChartStyle.dart';
 import '../painters/singleLineChartPainter.dart';
 
 class FlutterChart extends StatefulWidget {
-  final Map<double, double> data;
+  final Map<double, double>? data;
   final Function(double) getHorizontalAxis;
   final Function(double) getVerticalAxis;
   final SingleLineChartStyle style;
@@ -20,17 +20,17 @@ class FlutterChart extends StatefulWidget {
   final double verticalLinesDrawProgress;
 
   const FlutterChart({
-    @required this.data,
-    @required this.getHorizontalAxis,
-    @required this.getVerticalAxis,
-    @required this.style,
-    @required this.allowPopupOverflow,
-    @required this.popup,
-    @required this.showPopup,
-    @required this.hidePopup,
-    @required this.dataDrawProgress,
-    @required this.horizontalLinesDrawProgress,
-    @required this.verticalLinesDrawProgress,
+    required this.data,
+    required this.getHorizontalAxis,
+    required this.getVerticalAxis,
+    required this.style,
+    required this.allowPopupOverflow,
+    required this.popup,
+    required this.showPopup,
+    required this.hidePopup,
+    required this.dataDrawProgress,
+    required this.horizontalLinesDrawProgress,
+    required this.verticalLinesDrawProgress,
   });
 
   @override
@@ -39,10 +39,10 @@ class FlutterChart extends StatefulWidget {
 
 class _FlutterChartState extends State<FlutterChart>
     with TickerProviderStateMixin {
-  Map<double, double> data;
+  Map<double, double>? data;
   Map<double, double> smooth = Map();
-  Offset tap;
-  double lastValue;
+  Offset? tap;
+  double? lastValue;
 
   void startTap(Offset offset) {
     tap = offset;
@@ -68,7 +68,7 @@ class _FlutterChartState extends State<FlutterChart>
               style: widget.style, //widget.style,
               getHorizontalAxis: widget.getHorizontalAxis,
               getVerticalAxis: widget.getVerticalAxis,
-              rawData: widget.data,
+              rawData: widget.data!,
               tap: tap,
               allowPopupOverflow: widget.allowPopupOverflow,
               horizontalLinesAnimationValue: widget

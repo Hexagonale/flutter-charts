@@ -9,14 +9,14 @@ class MultiLineChartStyle extends ChartStyle {
   final PopupStyle popupStyle;
 
   MultiLineChartStyle({
-    Color backgroundColor,
-    ChartLineStyle horizontalLinesStyle,
-    ChartLineStyle verticalLinesStyle,
-    int horizontalPointsCount,
-    int verticalPointsCount,
-    TextStyle horizontalAxisTextStyle,
-    TextStyle verticalAxisTextStyle,
-    EdgeInsets plotPadding,
+    Color? backgroundColor,
+    ChartLineStyle? horizontalLinesStyle,
+    ChartLineStyle? verticalLinesStyle,
+    int? horizontalPointsCount,
+    int? verticalPointsCount,
+    TextStyle? horizontalAxisTextStyle,
+    TextStyle? verticalAxisTextStyle,
+    EdgeInsets? plotPadding,
     this.dataLineStyle = const ChartLineStyle(
       color: const Color(0xfffb6280),
     ),

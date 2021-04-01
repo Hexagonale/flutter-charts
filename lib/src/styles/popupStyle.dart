@@ -4,7 +4,7 @@ class PopupStyle {
   final Color color, shadowColor;
   final double elevation;
   final EdgeInsets padding;
-  final Size size;
+  final Size? size;
   final TextStyle keyTextStyle, valueTextStyle;
   final BorderRadius borderRadius;
   final double textSpacing;
