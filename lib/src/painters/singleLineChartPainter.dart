@@ -225,8 +225,7 @@ class SingleLineChartPainter extends ChartPainter {
     if (neighbours.length == 0) return Offset.zero;
 
     // Get percentage of touch beetwen them
-    final double percent =
-        (tap - neighbours[0]) / (neighbours[1] - neighbours[0]);
+    final double percent = (tap - neighbours[0]) / (neighbours[1] - neighbours[0]);
 
     // Return lerped offset
     return Offset(
@@ -265,7 +264,7 @@ class SingleLineChartPainter extends ChartPainter {
     final start = _getPointFromKey(keys.first);
     path.moveTo(start.dx, start.dy);
 
-    final int maxKey = (keys.length * (dataIntroAnimationValue ?? 1)).ceil();
+    final int maxKey = (keys.length * dataIntroAnimationValue).ceil();
     for (int i = 1; i < maxKey; i++) {
       final Offset point = _getPointFromKey(keys[i]);
       path.lineTo(point.dx, point.dy);
@@ -308,8 +307,7 @@ class SingleLineChartPainter extends ChartPainter {
     if (oldDelegate.drawPoint != drawPoint) return true;
     if (oldDelegate.drawPopup != drawPopup) return true;
     if (oldDelegate.popupAnimationValue != popupAnimationValue) return true;
-    if (oldDelegate.dataIntroAnimationValue != dataIntroAnimationValue)
-      return true;
+    if (oldDelegate.dataIntroAnimationValue != dataIntroAnimationValue) return true;
     if (super.shouldRepaint(oldDelegate)) return true;
 
     return false;

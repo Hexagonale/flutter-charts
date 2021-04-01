@@ -1,6 +1,5 @@
 import 'dart:ui';
 
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 import '../styles/singleLineChartStyle.dart';
@@ -37,8 +36,7 @@ class FlutterChart extends StatefulWidget {
   _FlutterChartState createState() => _FlutterChartState();
 }
 
-class _FlutterChartState extends State<FlutterChart>
-    with TickerProviderStateMixin {
+class _FlutterChartState extends State<FlutterChart> with TickerProviderStateMixin {
   Map<double, double>? data;
   Map<double, double> smooth = Map();
   Offset? tap;
@@ -54,10 +52,8 @@ class _FlutterChartState extends State<FlutterChart>
 
   @override
   Widget build(BuildContext context) => GestureDetector(
-        onTapDown: (details) =>
-            widget.popup < 0.5 ? startTap(details.localPosition) : null,
-        onTapUp: (details) =>
-            widget.popup < 0.5 ? startTap(details.localPosition) : endTap(),
+        onTapDown: (details) => widget.popup < 0.5 ? startTap(details.localPosition) : null,
+        onTapUp: (details) => widget.popup < 0.5 ? startTap(details.localPosition) : endTap(),
         onPanStart: (details) => startTap(details.localPosition),
         onPanUpdate: (details) => updateTap(details.localPosition),
         onPanEnd: (details) => endTap(),
@@ -71,10 +67,8 @@ class _FlutterChartState extends State<FlutterChart>
               rawData: widget.data!,
               tap: tap,
               allowPopupOverflow: widget.allowPopupOverflow,
-              horizontalLinesAnimationValue: widget
-                  .horizontalLinesDrawProgress, //dataIntroAnimation.value,
-              verticalLinesAnimationValue:
-                  widget.verticalLinesDrawProgress, //dataIntroAnimation.value,
+              horizontalLinesAnimationValue: widget.horizontalLinesDrawProgress, //dataIntroAnimation.value,
+              verticalLinesAnimationValue: widget.verticalLinesDrawProgress, //dataIntroAnimation.value,
               dataIntroAnimationValue: widget.dataDrawProgress,
               popupAnimationValue: widget.popup,
             ),

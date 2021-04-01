@@ -2,7 +2,6 @@ import 'dart:ui' as ui;
 import 'dart:math';
 
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 import '../styles/chartStyle.dart';
@@ -117,10 +116,8 @@ abstract class ChartPainter extends CustomPainter {
     );
 
     // Draw horizontal and vertical lines if needed
-    if (style.verticalLinesStyle!.draw)
-      _drawVerticalLines(canvas, chartRect, horizontalPositions);
-    if (style.horizontalLinesStyle!.draw)
-      _drawHorizontalLines(canvas, chartRect, verticalPositions);
+    if (style.verticalLinesStyle!.draw) _drawVerticalLines(canvas, chartRect, horizontalPositions);
+    if (style.horizontalLinesStyle!.draw) _drawHorizontalLines(canvas, chartRect, verticalPositions);
 
     // Draw vertical axis text
     for (final TextPainter painter in verticalPainters) {
@@ -175,10 +172,8 @@ abstract class ChartPainter extends CustomPainter {
     if (oldDelegate.tap?.dx != tap?.dx) return true;
     if (oldDelegate.tap?.dy != tap?.dy) return true;
     if (oldDelegate.allowPopupOverflow != allowPopupOverflow) return true;
-    if (oldDelegate.horizontalLinesAnimationValue !=
-        horizontalLinesAnimationValue) return true;
-    if (oldDelegate.verticalLinesAnimationValue != verticalLinesAnimationValue)
-      return true;
+    if (oldDelegate.horizontalLinesAnimationValue != horizontalLinesAnimationValue) return true;
+    if (oldDelegate.verticalLinesAnimationValue != verticalLinesAnimationValue) return true;
 
     return false;
   }

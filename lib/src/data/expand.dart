@@ -8,7 +8,7 @@ Map<double, double?> expand(Map<double, double> input, double factor) {
   final Iterator<double> keys = input.keys.iterator;
   final double minX = input.keys.fold(0, (acc, e) => min(e, acc));
   final double maxX = input.keys.fold(0, (acc, e) => max(e, acc));
-  final double timeSpan = maxX - minX;
+  // final double timeSpan = maxX - minX;
   // final double minY = input.values.fold(0, (acc, e) => min(e, acc));
   // final double maxY = input.values.fold(0, (acc, e) => max(e, acc));
   // final double valueSpan = maxY - minY;
